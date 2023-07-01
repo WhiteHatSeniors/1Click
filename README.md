@@ -53,7 +53,7 @@
 
 ## Contributors
 
-- [Syed Hisham Akmal](hisham-akmal.netlify.app)
+- [Syed Hisham Akmal](https://hisham-akmal.netlify.app)
 
 - [Sayed Afnan Khazi](https://safnank.netlify.app/)
 
