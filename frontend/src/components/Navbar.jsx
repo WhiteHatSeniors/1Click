@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import NavLink from "./NavLink";
-import logo from "../assets/logo.png";
+import logo from "../assets/1Click-logos/1Click-logos_white.png";
 import { useAuthContext } from "../context/AuthContext";
 import useLogout from '../hooks/useLogout';
 import {useNavigate} from 'react-router-dom'
@@ -41,7 +41,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="text-white font-semibold text-lg">
-            <img src={logo} alt="Logo" className="w-32 h-32 mx-auto" />
+            <img src={logo} alt="Logo" className="w-36 h-36 mx-auto mt-3" />
             </Link>
           </div>
           <div className="hidden md:block">
