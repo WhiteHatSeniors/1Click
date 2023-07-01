@@ -1,14 +1,17 @@
-import React from 'react';
+
 import { AiFillCalendar, AiOutlineMail, AiOutlinePhone, AiOutlineEnvironment } from 'react-icons/ai';
 import { BsTag } from 'react-icons/bs';
 import { IoMale, IoFemale } from 'react-icons/io5';
-import { FaLink } from 'react-icons/fa';
-import { useLocation } from 'react-router-dom';
+import { FaLink , FaMapMarkerAlt} from 'react-icons/fa';
+import { IoMdArrowRoundBack } from 'react-icons/io';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const EventDesc = () => {
 
   
   const loc = useLocation()
+
+  const navigate=useNavigate()
 
   // console.log(loc, loc.state)
 
@@ -21,6 +24,7 @@ const EventDesc = () => {
     genders,
     phone,
     topics,
+    coordinates,
     venue,
     location,
     description,
@@ -110,6 +114,7 @@ const EventDesc = () => {
 
   return (
     <div className="mx-auto block p-6 w-[90%] md:w-[70%] bg-white rounded-lg border border-gray-300 shadow-md mt-14 mb-14">
+      <button onClick={()=>navigate(-1)} ><IoMdArrowRoundBack className='my-3 h-6 w-6 hover:text-gray-500'/></button>
       <h1 className="text-xl font-bold mb-4">{name}</h1>
       <div className="flex items-center text-gray-600 mb-4">
         <AiFillCalendar className="mr-2" />
@@ -147,6 +152,10 @@ const EventDesc = () => {
               <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline break-all">{url}</a>
             </div>
           )}
+            <div className="flex items-center mb-4">
+              <FaMapMarkerAlt className="text-gray-500 mr-2" />
+              <a href={`https://www.google.com/maps/search/?api=1&query=${coordinates.latitude},${coordinates.longitude}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline break-all">{name}</a>
+            </div>
     </div>
   );
 };

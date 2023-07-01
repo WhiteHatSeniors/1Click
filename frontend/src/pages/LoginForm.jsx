@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'; // Assuming you are using React Router for navigation
-import logo from '../assets/logo.png'; // Replace with your own logo or image
+import logo from "../assets/1Click-logos/1Click-logos_black.png"; // Replace with your own logo or image
 import { useRef } from 'react';
 import useLogin from '../hooks/useLogin';
 
