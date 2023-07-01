@@ -410,5 +410,17 @@ def check_user():
     return jsonify({"exists": False}), 200
 
 
+@app.route("/api/delete-attendee", methods=["DELETE"])
+def delete_attendee():
+    if not session.get("user"):
+        return jsonify({"error": "Not logged in"}), 403
+
+    data = request.args.to_dict()
+    print(data)
+    print(attendees_col.find_one({"_id": ObjectId(data["_id"])}))
+    attendees_col.delete_one({"_id": ObjectId(data["_id"])})
+    return jsonify(message="Deleted Successfully"), 200
+
+
 if __name__ == "__main__":
     app.run(debug=True)
