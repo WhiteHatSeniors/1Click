@@ -450,6 +450,10 @@ def my_events():
     )  # Find events with matching IDs
     return parse_json(list(attended_events)), 200
 
+@app.route("/api/events/<eid>", methods=["GET"])
+def get_event(eid):
+    event = events_col.find_one({"_id": ObjectId(eid)})
+    return parse_json(event), 200
 
 # Check if user's session exists
 @app.route("/api/check-user")
