@@ -47,7 +47,7 @@ useEffect(() => {
     if(!(state?.user)){
         return navigate('/reg-form', {state:{
             fields,eid: event._id
-        }, setRegistered})
+        }})
     }
     if(!registered) register(state?.user, true, event._id); else register(state?.user, false, event._id)
     if(!registered) toast.success("Registered successfully!"); else toast.success("Unregistered yourself succesfully!")

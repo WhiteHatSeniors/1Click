@@ -345,21 +345,29 @@ def register(eid):
     #     print("EMAILLLL ", email)
     #     if email is not None:
     #         return jsonify(error="Email already registered for the event!"), 400
-
+    print("isRegistered ", data["isRegistered"])
     if data["isRegistered"] is True:
+        print("IN IF ", session.get("user").get("_id"), eid)
         fields = events_col.find_one({"_id": ObjectId(eid)}, {"fields": 1, "_id": 0})
         attendee_details = {}
         for field in fields["fields"]:
             attendee_details[field.lower()] = data[field]
         attendee_details["eid"] = eid
-        if session.get("user_id"):
+        if session.get("user"):
             attendee_details["uid"] = session.get("user").get("_id")  # or data["_id"]
 
         attendees_col.insert_one(attendee_details)
         return jsonify(fields), 201
     else:
-        attendees_col.delete_one({"uid": session.get("user").get("_id"), "eid": eid})
-        return jsonify(message="Successfully unregistered"), 200
+        print("IN ELSE ", session.get("user").get("_id"), eid)
+        print(
+            attendees_col.find_one({"uid": session.get("user").get("_id"), "eid": eid})
+        )
+        if session.get("user"):
+            attendees_col.delete_one(
+                {"uid": session.get("user").get("_id"), "eid": eid}
+            )
+            return jsonify(message="Successfully unregistered"), 200
 
 
 # Check if the user is registered
