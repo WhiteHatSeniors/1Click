@@ -1,7 +1,7 @@
 import { AiFillCalendar, AiFillInfoCircle, AiOutlineEnvironment } from 'react-icons/ai';
 import { FiInfo } from 'react-icons/fi';
 import { BiLinkExternal } from 'react-icons/bi';
-import { IoLocationOutline } from 'react-icons/io5';
+import { IoCopy } from 'react-icons/io5';
 import { useAuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -71,7 +71,6 @@ useEffect(() => {
         <h2 className="text-sm font-bold mb-2 flex items-center">
           <span className="text-gray-600">5 km away</span>
           <div className="relative ml-2">
-            <GoCopy />
             <FiInfo
               className="text-gray-500 cursor-pointer"
               onMouseEnter={() => setShowInfo(true)}
@@ -85,7 +84,14 @@ useEffect(() => {
             
           </div>
         </h2>
+        <div className='flex'>
         <Link state={event} to='/event-description' className='text-sm font-bold mb-2 flex items-center hover:text-green-300'><BiLinkExternal /></Link>
+        <button className='mx-2 mb-2' onClick={()=>{
+          navigator.clipboard.writeText(`http://localhost:3000/event/${event?._id}`)
+          toast.success("Event URL copied to clipboard!")
+        }}><GoCopy /></button>
+        </div>
+        
       </div>
       <div className="bg-zinc-200 py-3 px-4">
         <div className="flex justify-between items-center mb-2">

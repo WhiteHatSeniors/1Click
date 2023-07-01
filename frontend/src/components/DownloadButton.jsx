@@ -1,7 +1,8 @@
 
 const DownloadButton = ({id}) => {
   const handleDownload = () => {
-    fetch(`/api/list-attendees/${id}`) // Replace with your Flask backend endpoint
+    console.log(id)
+    fetch(`/api/get-attendees-csv/${id}`) // Replace with your Flask backend endpoint
       .then((response) => response.blob())
       .then((blob) => {
         const url = window.URL.createObjectURL(new Blob([blob]));
@@ -19,7 +20,7 @@ const DownloadButton = ({id}) => {
 
   return (
     <button
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      className="block bg-blue-500 hover:bg-blue-700 text-center text-white font-bold py-2 px-4 rounded"
       onClick={handleDownload}
     >
       Download CSV
