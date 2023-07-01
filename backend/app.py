@@ -7,7 +7,7 @@ from bson import ObjectId
 from bson.json_util import dumps, loads
 import os
 import datetime
-from flask_mail import Message,Mail
+from flask_mail import Message, Mail
 
 load_dotenv()
 
@@ -26,34 +26,39 @@ events_col = db["events"]
 attendees_col = db["attendees"]
 
 # Mail configuration
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = os.environ.get("EMAIL")
-app.config['MAIL_DEFAULT_SENDER'] = os.environ.get("EMAIL")
-app.config['MAIL_PASSWORD'] = os.environ.get("APP_PASSWORD")
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_PORT"] = 587
+app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_USERNAME"] = os.environ.get("EMAIL")
+app.config["MAIL_DEFAULT_SENDER"] = os.environ.get("EMAIL")
+app.config["MAIL_PASSWORD"] = os.environ.get("APP_PASSWORD")
 mail = Mail(app)
 
 
 def parse_json(data):
     return json.loads(json.dumps(data, default=str))
 
-def validate_password(password):
 
+def validate_password(password):
     # Password checker
     # Primary conditions for password validation:
     # Minimum 8 characters.
     # The alphabet must be between [a-z]
     # At least one alphabet should be of Upper Case [A-Z]
     # At least 1 number or digit between [0-9].
-    # At least 1 character from [ _ or @ or $ ]. 
+    # At least 1 character from [ _ or @ or $ ].
 
-    #\s- Returns a match where the string contains a white space character
-    if len(password) < 8 or re.search("\s" , password):  
-        return False  
-    if not (re.search("[a-z]", password) and re.search("[A-Z]", password) and re.search("[0-9]", password) ):
-        return False  
-    return True  
+    # \s- Returns a match where the string contains a white space character
+    if len(password) < 8 or re.search("\s", password):
+        return False
+    if not (
+        re.search("[a-z]", password)
+        and re.search("[A-Z]", password)
+        and re.search("[0-9]", password)
+    ):
+        return False
+    return True
+
 
 # Registering to the application
 @app.route("/api/signup", methods=["POST"])
@@ -85,8 +90,13 @@ def signup():
 
     # Validate Password
     if not validate_password(data["password"]):
-        return jsonify(error="Password must contain atleast 8 characters, 1 uppercase, 1 lowercase, 1 number and 1 special character"), 400
-    
+        return (
+            jsonify(
+                error="Password must contain atleast 8 characters, 1 uppercase, 1 lowercase, 1 number and 1 special character"
+            ),
+            400,
+        )
+
     # Compare password with confirmPassword
     if data["password"] != data["confirmPassword"]:
         return jsonify(error="Passwords do not match"), 400
@@ -122,7 +132,7 @@ def signup():
     # Send email to user
     subject = f"You're registered to 1Click, {data['name']}"
     body = "Your registeration is complete!\nLogin here http://localhost:3000/login to get started with 1Click!"
-    
+
     # # Create the plain-text and HTML version of your message
     text = "Subject:" + subject + "\n" + body
     html = """
@@ -136,9 +146,10 @@ def signup():
 
     msg = Message()
     msg.subject = subject
-    msg.recipients = [data['email']]
+    msg.recipients = [data["email"]]
     msg.body = text
     msg.html = html
+    msg.sender = os.environ.get("EMAIL")
     mail.send(msg)
 
     return jsonify(message="Signup successful")
@@ -160,7 +171,6 @@ def login():
 
     if user is None:
         return jsonify(error="User doesn't exist"), 400
-
 
     if user and bcrypt.check_password_hash(user["password"], data["password"]):
         # Store the entire user in the session
