@@ -273,12 +273,13 @@ def create_event():
 
     return jsonify(message="Event created")
 
+
 # @app.route("/api/update", methods=["PATCH"])
 # def update_event():
 #     data = request.get_json()
 #     if not session.get("user"):
 #         return jsonify(error="Not logged in"), 403
-    
+
 #     # Validate the required fields
 #     # Validate the required fields
 #     required_fields = [
@@ -362,6 +363,7 @@ def list_attendees(eid):
     attendees = list(attendees_col.find(query))
     return parse_json(attendees), 200
 
+
 @app.route("/api/get-attendees-csv/<eid>")
 def get_attendees_csv(eid):
     # if not session.get("user"):
@@ -370,7 +372,7 @@ def get_attendees_csv(eid):
     query = {"eid": eid}
     attendees = list(attendees_col.find(query))
     # Create and open a file called "attendees.csv" in write mode
-    filename=f"attendees-{eid}-{datetime.datetime.now()}.csv"
+    filename = f"attendees-{eid}.csv"
     fields = events_col.find_one({"_id": ObjectId(eid)}, {"fields": 1, "_id": 0})
     with open(f"./attendees-store/{filename}", "w") as file:
         wobj = csv.writer(file)
@@ -381,7 +383,10 @@ def get_attendees_csv(eid):
                 to_write.append(attendee[field])
             wobj.writerow(to_write)
 
-    return send_from_directory(directory='./attendees-store', path=filename, as_attachment=True)
+    return send_from_directory(
+        directory="./attendees-store", path=filename, as_attachment=True
+    )
+
 
 # Users registering for the event
 @app.route("/api/register/<eid>", methods=["POST"])
@@ -458,12 +463,14 @@ def check_user():
         return parse_json({"exists": True, "user": session.get("user")}), 200
     return jsonify({"exists": False}), 200
 
+
 # DEVROUTE: GET ALL DATA TO JSON. SHOULDN'T BE USED IN PRODUCTION
 @app.route("/api/get-all-data/<collection_name>")
 def get_all_data(collection_name):
     collection = db[collection_name]
     data = list(collection.find())
     return parse_json(data), 200
+
 
 @app.route("/api/delete-attendee", methods=["DELETE"])
 def delete_attendee():
