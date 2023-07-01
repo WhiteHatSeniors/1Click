@@ -1,7 +1,7 @@
 
-            Fonts used: Lato-Regular,LeagueGothic-Italic 
+            Fonts used: AbrilFatface-Regular,OldStandardTT-Italic 
 
-            Colors used: E2E2E2,171717  
+            Colors used: A8AFBA,F5F5F5  
 
-            Icon url: https://thenounproject.com/term/online/1440673  
+            Icon url: https://thenounproject.com/term/click/230228  
         
