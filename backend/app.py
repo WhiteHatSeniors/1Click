@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session, send_from_directory
+from flask import Flask, request, jsonify, session, make_response
 import json, re, csv
 from flask_bcrypt import Bcrypt
 from pymongo import MongoClient
@@ -351,8 +351,19 @@ def get_attendees_csv(eid):
             for field in fields["fields"]:
                 to_write.append(attendee[field])
             wobj.writerow(to_write)
+    with open(f"./attendees-store/{filename}", "r") as file:
+        data = file.readlines()
+    # Create a CSV string from the data
+    csv_data = '\n'.join([','.join(row) for row in data])
 
-    return send_from_directory('./attendees-store', filename, as_attachment=True)
+    # Create a response with the CSV data
+    response = make_response(csv_data)
+    
+    # Set the appropriate headers
+    response.headers['Content-Disposition'] = 'attachment; filename=data.csv'
+    response.headers['Content-type'] = 'text/csv'
+
+    return response
 
 # Users registering for the event
 @app.route("/api/register/<eid>", methods=["POST"])
