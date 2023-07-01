@@ -160,13 +160,11 @@ def login():
     if user is None:
         return jsonify(error="User doesn't exist"), 400
 
-    print(user, bcrypt.check_password_hash(user["password"], data["password"]))
 
     if user and bcrypt.check_password_hash(user["password"], data["password"]):
         # Store the entire user in the session
         # parse_json helps us deal with ObjectID in python
         session["user"] = parse_json(user)
-        print(session.get("user"))
         return parse_json(user), 200
     else:
         return jsonify(error="Invalid credentials"), 400
@@ -175,7 +173,6 @@ def login():
 @app.route("/api/logout", methods=["POST"])
 def logout():
     # Clear the user from the session
-    print(session.get("user"))
     if not session.get("user"):
         return jsonify({"error": "Not logged in"}), 403
     session.pop("user", None)
@@ -269,7 +266,6 @@ def create_event():
 @app.route("/api/network")
 def network():
     if not session.get("user"):
-        print(session.get("user"))
         return jsonify({"error": "Not logged in"}), 403
 
     # print(session.get("user").get("email"), session["user"])
@@ -281,7 +277,6 @@ def network():
 @app.route("/api/recommended")
 def recommended():
     recommended_events = list(events_col.find())
-    print(recommended_events)
     return parse_json(recommended_events), 200
 
 
@@ -325,7 +320,6 @@ def list_attendees(eid):
 
     query = {"eid": eid}
     events = list(attendees_col.find(query))
-    print(events)
     return parse_json(events), 200
 
 
@@ -343,7 +337,6 @@ def register(eid):
 
     if data["isRegistered"] is True:
         fields = events_col.find_one({"_id": ObjectId(eid)}, {"fields": 1, "_id": 0})
-        print(fields)
         attendee_details = {}
         for field in fields["fields"]:
             attendee_details[field.lower()] = data[field]
@@ -351,12 +344,10 @@ def register(eid):
         if session.get("user_id"):
             attendee_details["uid"] = session.get("user").get("_id")  # or data["_id"]
 
-        print(attendee_details)
         attendees_col.insert_one(attendee_details)
         return jsonify(fields), 201
     else:
         attendees_col.delete_one({"uid": session.get("user").get("_id"), "eid": eid})
-        print("HAHHAHAHAHAHHA ", session.get("user").get("_id"), eid)
         return jsonify(message="Successfully unregistered"), 200
 
 
@@ -364,12 +355,10 @@ def register(eid):
 @app.route("/api/check-register/<eid>")
 def check_register(eid):
     check = None
-    print(session.get("user"))
     if session.get("user"):
         check = attendees_col.find_one(
             {"eid": eid, "uid": session.get("user").get("_id")}
         )
-        print(eid, session.get("user").get("_id"))
         return jsonify({"registered": True}), 200
     if check is None:
         return jsonify({"registered": False}), 200
