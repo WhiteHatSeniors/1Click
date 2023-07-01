@@ -78,9 +78,7 @@ const EventManagerCardDesc = () => {
       {data?.length!=0 && <DataTable data={data} deleteEntry={deleteEntry} col={loc.state.fields} />}
       {!(data) && "Loading..."}
       {data?.length==0 && <div className='text-center'>No attendees for now!</div>}
-      {data?.length!=0 && /*<button className={`text-white bg-blue-700 px-3 text-center py-2 mx-0 font-sm focus:outline-none hover:bg-blue-800`} onClick={downloadCSV}>
-           <a className="hidden-element" download href={data} ref={dataLink}>Download CSV</a>
-        </button>*/ <DownloadButton id={loc.state.event._id} /> }
+      {data?.length!=0 && <div className='text-center flex justify-center'><DownloadButton id={loc.state.event._id} /></div> }
     </div>
   );
 };
