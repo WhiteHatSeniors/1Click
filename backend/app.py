@@ -372,8 +372,8 @@ def check_register(eid):
         )
         if check is None:
             return jsonify({"registered": False}), 200
-
-    return jsonify({"registered": True}), 200
+        else:
+            return jsonify({"registered": True}), 200
 
 
 # Implement this Afnan
