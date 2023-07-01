@@ -60,6 +60,7 @@ def validate_password(password):
     return True
 
 
+# Registering to the application
 @app.route("/api/signup", methods=["POST"])
 def signup():
     # Get the signup data from the request
@@ -189,25 +190,25 @@ def logout():
     return jsonify(message="Logout successful")
 
 
-@app.route("/api/forgot-password", methods=["POST"])
-def forgot_password():
-    # Get the forgot password data from the request
-    data = request.get_json()
+# @app.route("/api/forgot-password", methods=["POST"])
+# def forgot_password():
+#     # Get the forgot password data from the request
+#     data = request.get_json()
 
-    # Validate the required fields
-    required_fields = ["email"]
-    for field in required_fields:
-        if field not in data:
-            return jsonify(error=f"Missing required field: {field}"), 400
+#     # Validate the required fields
+#     required_fields = ["email"]
+#     for field in required_fields:
+#         if field not in data:
+#             return jsonify(error=f"Missing required field: {field}"), 400
 
-    # Retrieve the user document from the users collection
-    user = users_col.find_one({"email": data["email"]})
+#     # Retrieve the user document from the users collection
+#     user = users_col.find_one({"email": data["email"]})
 
-    if user:
-        # Reset the password logic here (e.g., send password reset email)
-        return jsonify(message="Password reset email sent")
-    else:
-        return jsonify(error="User not found")
+#     if user:
+#         # Reset the password logic here (e.g., send password reset email)
+#         return jsonify(message="Password reset email sent")
+#     else:
+#         return jsonify(error="User not found")
 
 
 @app.route("/api/create", methods=["POST"])
@@ -333,7 +334,7 @@ def list_attendees(eid):
     return parse_json(events), 200
 
 
-# Users reigistering for the event
+# Users registering for the event
 @app.route("/api/register/<eid>", methods=["POST"])
 def register(eid):
     # if not session.get("user"):
@@ -378,8 +379,14 @@ def check_register(eid):
 # Implement this Afnan
 @app.route("/api/my-events")
 def my_events():
-    if session.get("user"):
-        events = attendees_col.find({"uid": session.get("user").get("_id")})
+    if not session.get("user"):
+        return jsonify({"error": "Not logged in"}), 403
+    
+    event_ids = attendees_col.find({"uid": session.get("user").get("_id")})
+    # print(type(event_ids))
+    events = events_col.find({"_id": {"$in": event_ids}})
+    # print(list(events))
+    return parse_json(list(events)), 200
 
 
 # Check if user's session exists
