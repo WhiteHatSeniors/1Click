@@ -1,5 +1,5 @@
-from flask import Flask, request, jsonify, session
-import json, re
+from flask import Flask, request, jsonify, session, send_from_directory
+import json, re, csv
 from flask_bcrypt import Bcrypt
 from pymongo import MongoClient
 from dotenv import load_dotenv
@@ -330,9 +330,29 @@ def list_attendees(eid):
         return jsonify({"error": "Not logged in"}), 403
 
     query = {"eid": eid}
-    events = list(attendees_col.find(query))
-    return parse_json(events), 200
+    attendees = list(attendees_col.find(query))
+    return parse_json(attendees), 200
 
+@app.route("/api/get-attendees-csv/<eid>")
+def get_attendees_csv(eid):
+    # if not session.get("user"):
+    #     return jsonify({"error": "Not logged in"}), 403
+
+    query = {"eid": eid}
+    attendees = list(attendees_col.find(query))
+    # Create and open a file called "attendees.csv" in write mode
+    filename=f"attendees-{eid}-{datetime.datetime.now()}.csv"
+    fields = events_col.find_one({"_id": ObjectId(eid)}, {"fields": 1, "_id": 0})
+    with open(f"./attendees-store/{filename}", "w") as file:
+        wobj = csv.writer(file)
+        wobj.writerow(fields["fields"])
+        for attendee in attendees:
+            to_write = []
+            for field in fields["fields"]:
+                to_write.append(attendee[field])
+            wobj.writerow(to_write)
+
+    return send_from_directory('./attendees-store', filename, as_attachment=True)
 
 # Users registering for the event
 @app.route("/api/register/<eid>", methods=["POST"])
@@ -409,6 +429,12 @@ def check_user():
         return parse_json({"exists": True, "user": session.get("user")}), 200
     return jsonify({"exists": False}), 200
 
+# DEVROUTE: GET ALL DATA TO JSON. SHOULDN'T BE USED IN PRODUCTION
+@app.route("/api/get-all-data/<collection_name>")
+def get_all_data(collection_name):
+    collection = db[collection_name]
+    data = list(collection.find())
+    return parse_json(data), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
