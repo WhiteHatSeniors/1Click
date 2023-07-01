@@ -1,23 +1,24 @@
 import { Link } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
 
 function Home() {
 
+  const {state} = useAuthContext()
+
   return (
-  <div className="bg-gray-100">
-  <section className="bg-gray-900 text-white py-16">
-        <div className="container mx-auto text-center">
-          <img src="/path/to/your/logo.png" alt="Event Registration Platform" className="mx-auto mb-8" />
+  <div className="bg-gray-100 ">
+  <section className={`bg-gray-900 text-white py-16 ${state?.user && 'h-screen'}`}>
+        <div className="container mx-auto text-center ${state?.user && 'mx-0 my-20 ' }">
+          {state?.user ? <h1 className="text-4xl font-bold mb-4">Hi, {state?.user?.name}👋</h1>: <h1 className="text-4xl font-bold mb-4">1Click Events Platform</h1> }
+          {state?.user ? <p className="text-lg mb-8">What brings you here today?</p>:<p className="text-lg mb-8">Register for events in just one click. No hassle, no long forms.</p>}
 
-          <h1 className="text-4xl font-bold mb-4">One-Click Event Registration</h1>
-          <p className="text-lg mb-8">Register for events in just one click. No hassle, no long forms.</p>
-
-          <Link to="/signup" className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded">
-            Register Now
-          </Link>
+          {!(state.user)? <Link to="/signup" className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded">Register Now
+          </Link> : <Link to="/signup" className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded">Events for you</Link>}
+            {state?.user &&  <Link to="/signup" className="bg-blue-500 mx-5 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded">Your Networks</Link>}
         </div>
       </section>
 
-      <section className="py-16">
+      {!(state.user) && <section className="py-16">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold mb-8 text-center">Why Choose 1-Click Registration?</h2>
 
@@ -49,7 +50,7 @@ function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section>}
     </div>
   );
 }
