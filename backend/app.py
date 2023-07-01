@@ -386,14 +386,13 @@ def check_register(eid):
 
 
 # Implement this Afnan
-@app.route("/api/my-events")
+@app.route("/api/my-events", methods=["GET"])
 def my_events():
     if not session.get("user"):
         return jsonify({"error": "Not logged in"}), 403
     
     attending_events = attendees_col.find({"uid": session.get("user").get("_id")})
-    event_ids = [record['eid'] for record in attending_events]  # Extract event IDs from attending records
-
+    event_ids = [ObjectId(record['eid']) for record in attending_events]  # Extract event IDs from attending records
     attended_events = events_col.find({'_id': {'$in': event_ids}})  # Find events with matching IDs
     return parse_json(list(attended_events)), 200
 
