@@ -70,7 +70,7 @@ useEffect(() => {
       )} */}
           <div className="bg-gray-100 py-2 px-3 flex justify-between">
         <h2 className="text-sm font-bold mb-2 flex items-center">
-          <span className="text-gray-600">5 km away</span>
+          <span className="text-gray-600">{parseInt(Math.floor(Math.random() * 6))} km away</span>
           <div className="relative ml-2">
             <FiInfo
               className="text-gray-500 cursor-pointer"
