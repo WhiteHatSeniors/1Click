@@ -339,15 +339,15 @@ def list_attendees(eid):
 def register(eid):
     # if not session.get("user"):
     data = request.get_json()
-    # print(data, data["isRegistered"])
-    # if data.get("email") and session.get("user") is None:
-    #     email = attendees_col.find_one({"email": data.get("email"), "eid": eid})
-    #     print("EMAILLLL ", email)
-    #     if email is not None:
-    #         return jsonify(error="Email already registered for the event!"), 400
+    print(data, data["isRegistered"])
+    if data.get("email") and session.get("user") is None:
+        email = attendees_col.find_one({"email": data.get("email"), "eid": eid})
+        print("EMAILLLL ", email)
+        if email is not None:
+            return jsonify(error="Email already registered for the event!"), 400
     print("isRegistered ", data["isRegistered"])
     if data["isRegistered"] is True:
-        print("IN IF ", session.get("user").get("_id"), eid)
+        # print("IN IF ", session.get("user").get("_id"), eid)
         fields = events_col.find_one({"_id": ObjectId(eid)}, {"fields": 1, "_id": 0})
         attendee_details = {}
         for field in fields["fields"]:
@@ -390,12 +390,16 @@ def check_register(eid):
 def my_events():
     if not session.get("user"):
         return jsonify({"error": "Not logged in"}), 403
-    
-    attending_events = attendees_col.find({"uid": session.get("user").get("_id")})
-    event_ids = [ObjectId(record['eid']) for record in attending_events]  # Extract event IDs from attending records
-    attended_events = events_col.find({'_id': {'$in': event_ids}})  # Find events with matching IDs
-    return parse_json(list(attended_events)), 200
 
+    attending_events = attendees_col.find({"uid": session.get("user").get("_id")})
+    event_ids = [
+        record["eid"] for record in attending_events
+    ]  # Extract event IDs from attending records
+
+    attended_events = events_col.find(
+        {"_id": {"$in": event_ids}}
+    )  # Find events with matching IDs
+    return parse_json(list(attended_events)), 200
 
 
 # Check if user's session exists
