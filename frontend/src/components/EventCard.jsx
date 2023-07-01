@@ -118,7 +118,7 @@ useEffect(() => {
         </div>
       </div>
         
-      {(registered!=="Loading...") && state?.user && <button className={`text-white ${registered && (state?.user) ? 'bg-green-500':'bg-blue-500'} px-3 text-center py-2 w-full mx-0 font-sm focus:outline-none ${registered? 'hover:bg-green-800' : 'hover:bg-blue-800'}`} onClick={handleRegistration}>
+      {(registered!=="Loading...") && state?.user && <button className={`text-white ${registered && (state?.user) ? 'bg-green-600':'bg-blue-600'} px-3 text-center py-2 w-full mx-0 font-sm focus:outline-none ${registered? 'hover:bg-green-800' : 'hover:bg-blue-800'}`} onClick={handleRegistration}>
            {registered && (state?.user) ? "Registered!" : "Register"}
         </button>}
         {!(state?.user) && <div className='flex w-full'><button className={`text-white bg-green-700 px-3 text-center py-2 w-full mx-0 font-sm focus:outline-none hover:bg-green-800`} onClick={()=>navigate('/signup')}>

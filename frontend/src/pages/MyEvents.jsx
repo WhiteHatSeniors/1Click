@@ -12,9 +12,9 @@ function MyEvents() {
   }
 
   const { data, status, error, isLoading, refetch } = useQuery(["my-events"], getMyEvents, {
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    retry: false,
+    // refetchOnMount: false,
+    // refetchOnWindowFocus: false,
+    // retry: false,
     // enabled: false
   })
 
