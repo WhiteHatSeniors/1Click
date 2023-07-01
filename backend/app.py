@@ -393,7 +393,7 @@ def my_events():
 
     attending_events = attendees_col.find({"uid": session.get("user").get("_id")})
     event_ids = [
-        record["eid"] for record in attending_events
+        ObjectId(record["eid"]) for record in attending_events
     ]  # Extract event IDs from attending records
 
     attended_events = events_col.find(
