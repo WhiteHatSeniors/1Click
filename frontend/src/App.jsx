@@ -60,7 +60,7 @@ useEffect(() => {
       <Route path="/reg-form" element={<RegistrationForm />} /> 
       <Route path="/" element={<Home />} />
       <Route path="/event-description" element={<EventDesc />} />
-      <Route path="/event/:id" element={<Event />} />
+      <Route path="/event/:eid" element={<Event />} />
       <Route path="/recommended" element={<Recommended />} />
       <Route path="/list" element={state.user? <EventsManager /> : <SignUpForm />} />
       <Route path="/attendee-details" element={state.user? <EventManagerCardDesc /> : <SignUpForm />} />

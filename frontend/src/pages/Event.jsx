@@ -4,12 +4,54 @@ import { BsTag } from 'react-icons/bs';
 import { IoMale, IoFemale } from 'react-icons/io5';
 import { FaLink , FaMapMarkerAlt} from 'react-icons/fa';
 import { IoMdArrowRoundBack } from 'react-icons/io';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useAuthContext } from '../context/AuthContext';
+import useRegisterEvent from '../hooks/useRegisterEvent';
+import { toast } from 'react-toastify';
 
 const Event = () => {
 
+    const { eid } = useParams();
+    const [eventData, setEventData] = useState('')
+    const [registered, setRegistered] = useState("")
+    const {state}=useAuthContext()
+    const { register, error, isLoading, isSucc }=useRegisterEvent()
+
+    console.log(state)
   
-  const loc = useLocation()
+//   const loc = useLocation()
+useEffect(() => {
+  
+    const func= async ()=>{
+      const res=await fetch(`/api/events/${eid}`,{
+        method: 'GET',
+        credentials: "same-origin", //for cookies
+      })
+      const data = await res.json()
+      console.log(data)
+      setEventData(data)
+    };
+  
+    func()
+   
+  }, [eid])
+
+  
+useEffect(() => {
+  
+    const func= async ()=>{
+      const res=await fetch(`/api/check-register/${eid}`,{
+        method: 'GET',
+        credentials: "same-origin", //for cookies
+      })
+      const data = await res.json()
+      setRegistered(data?.registered)
+    };
+  
+    func()
+   
+  }, [eid])
 
   const navigate=useNavigate()
 
@@ -31,8 +73,25 @@ const Event = () => {
     minAge,
     maxAge,
     industry,
-    status,url
-  } = loc.state
+    status,url, fields
+  } = eventData
+
+
+  const handleRegistration =(e) =>{
+    e.preventDefault();
+    if(!(state?.user)){
+        return navigate('/reg-form', {state:{
+            fields,eid
+        }})
+    }
+    if(!registered) register(state?.user, true, eid); else register(state?.user, false, eid)
+    if(!registered) toast.success("Registered successfully!"); else toast.success("Unregistered yourself succesfully!")
+    setRegistered(prev => !prev)
+  }
+
+  
+  const isEventUnderway = new Date(startDate) <= new Date();
+  const label = isEventUnderway ? 'Event underway' : 'Event yet to start';
 
   const displayGenders = () => {
     if (genders.toLowerCase() === 'all') {
@@ -114,7 +173,12 @@ const Event = () => {
 
   return (
     <div className="mx-auto block p-6 w-[90%] md:w-[70%] bg-white rounded-lg border border-gray-300 shadow-md mt-14 mb-14">
-      <button onClick={()=>navigate(-1)} ><IoMdArrowRoundBack className='my-3 h-6 w-6 hover:text-gray-500'/></button>
+        
+      {eventData ? <>
+      {error && (
+       <div className="p-4 mb-7 w-full text-center text-sm text-red-800 rounded-lg bg-red-200  dark:text-red-700 " role="alert"> {error}
+     </div>
+      )}
       <h1 className="text-xl font-bold mb-4">{name}</h1>
       <div className="flex items-center text-gray-600 mb-4">
         <AiFillCalendar className="mr-2" />
@@ -156,15 +220,18 @@ const Event = () => {
               <FaMapMarkerAlt className="text-gray-500 mr-2" />
               <a href={`https://www.google.com/maps/search/?api=1&query=${coordinates.latitude},${coordinates.longitude}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline break-all">{name}</a>
             </div>
-            {(registered!=="Loading...") && state?.user && <button className={`text-white ${registered && (state?.user) ? 'bg-green-600':'bg-blue-600'} px-3 text-center py-2 w-full mx-0 font-sm focus:outline-none ${registered? 'hover:bg-green-800' : 'hover:bg-blue-800'}`} onClick={handleRegistration}>
+            {state?.user && <button className={`text-white ${registered && (state?.user) ? 'bg-green-600':'bg-blue-600'} px-3 text-center py-2 w-full mx-0 font-sm focus:outline-none ${registered? 'hover:bg-green-800' : 'hover:bg-blue-800'}`} onClick={handleRegistration}>
            {registered && (state?.user) ? "Registered!" : "Register"}
         </button>}
-        {!(state?.user) && <div className='flex w-full'><button className={`text-white bg-green-700 px-3 text-center py-2 w-full mx-0 font-sm focus:outline-none hover:bg-green-800`} onClick={()=>navigate('/signup')}>
+        {!(state?.user) && <div className='flex w-full'><button className={`text-white bg-green-700 px-3 text-center py-2 mx-0 font-sm focus:outline-none w-[50%] hover:bg-green-800`} onClick={()=>navigate('/signup')}>
            1Click Registration
-        </button><button className={`text-white bg-blue-700 px-3 text-center py-2 w-min mx-0 font-sm focus:outline-none hover:bg-blue-800`} onClick={handleRegistration}>
+        </button><button className={`text-white bg-blue-700 px-3 text-center py-2 w-[50%] mx-0 font-sm focus:outline-none hover:bg-blue-800`} onClick={handleRegistration}>
            Register
-        </button> </div>}
+        </button> </div>}</>:
+        <div className="mx-auto block p-6 w-[90%] md:w-[70%] bg-white rounded-lg border border-gray-300 shadow-md mt-14 mb-14">Loading...</div>
+        }
     </div>
+    
   );
 };
 
