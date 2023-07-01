@@ -125,7 +125,7 @@ useEffect(() => {
         </button>}
         {!(state?.user) && <div className='flex w-full'><button className={`text-white bg-green-700 px-3 text-center py-2 w-full mx-0 font-sm focus:outline-none hover:bg-green-800`} onClick={()=>navigate('/signup')}>
            1Click Registration
-        </button><button className={`text-white bg-blue-700 px-3 text-center py-2 w-full mx-0 font-sm focus:outline-none hover:bg-blue-800`} onClick={handleRegistration}>
+        </button><button className={`text-white bg-blue-700 px-3 text-center py-2 w-min mx-0 font-sm focus:outline-none hover:bg-blue-800`} onClick={handleRegistration}>
            Register
         </button> </div>}
     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AiFillCalendar, AiOutlineMail, AiOutlinePhone, AiOutlineEnvironment } from 'react-icons/ai';
 import { BsTag } from 'react-icons/bs';
 import { IoMale, IoFemale } from 'react-icons/io5';
@@ -16,6 +16,10 @@ const EventManagerCardDesc = () => {
   const loc = useLocation()
   // console.log(loc.state.fields)
 
+  const dataLink = useRef();
+  const [csv, setCsv] = useState('');
+
+
   const {state}= useAuthContext()
 
   const getEventAttendees = async () => {
@@ -31,10 +35,25 @@ const EventManagerCardDesc = () => {
     // // enabled: false
   })
 
+  useEffect(() => {
+    if (csv) {
+      dataLink.current.click();
+    }
+  }, [csv]);
+  
+
+  const downloadCSV = async (e)=>{
+        const res = await AxFetch.get(`/api/get-attendees-csv/${loc.state.event._id}`)
+        console.log(res)
+        setCsv(res.data)
+        // toast.success("Attendee deleted successfully")
+        
+    // else toast.error("Attendee not deleted!")
+  }
+
   const deleteEntry = async (id) => {
     const boolDelete = confirm("Do you want to remove the attendee?");
     if (boolDelete) {
-        // const data = await adminSignIn(username, pw)
         const data = await AxFetch.delete(`/api/delete-attendee?_id=${id}`)
 
         refetch()
@@ -58,6 +77,9 @@ const EventManagerCardDesc = () => {
       {data?.length!=0 && <DataTable data={data} deleteEntry={deleteEntry} col={loc.state.fields} />}
       {!(data) && "Loading..."}
       {data?.length==0 && <div className='text-center'>No attendees for now!</div>}
+      {data?.length!=0 && <button className={`text-white bg-blue-700 px-3 text-center py-2 mx-0 font-sm focus:outline-none hover:bg-blue-800`} onClick={downloadCSV}>
+           <a className="hidden-element" download href={data} ref={dataLink}>Download CSV</a>
+        </button> }
     </div>
   );
 };
