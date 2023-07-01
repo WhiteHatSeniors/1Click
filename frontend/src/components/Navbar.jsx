@@ -53,7 +53,7 @@ const Navbar = () => {
               {state.user && <NavLink to="/list" label="Event Manager" /> }
               {state.user && <NavLink to="/network" label="Your Network" />}
               {/* {state.user && <NavLink to="/blogs" label="Blogs" />} */}
-              {state.user && <NavLink to="/edit-profile" label="Edit Profile" />}
+              {/* {state.user && <NavLink to="/edit-profile" label="Edit Profile" />} */}
               {!(state.user) && <NavLink to="/" label="Home"/>}
               {!(state.user) ? <NavLink to="/login" label="Login" /> : 
               <button
@@ -98,7 +98,7 @@ const Navbar = () => {
               {state.user && <NavLink to="/list" label="Event Manager" /> }
               {state.user && <NavLink to="/network" label="Your Network" />}
               {/* {state.user && <NavLink to="/blogs" label="Blogs" />} */}
-              {state.user && <NavLink to="/edit-profile" label="Edit Profile" />}
+              {/* {state.user && <NavLink to="/edit-profile" label="Edit Profile" />} */}
               {!(state.user) && <NavLink to="/" label="Home"/>}
               {!(state.user) ? <NavLink to="/login" label="Login" /> : 
               <button
