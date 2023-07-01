@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import useRegisterEvent from '../hooks/useRegisterEvent';
 import { toast } from 'react-toastify';
+import { GoCopy } from "react-icons/go";
 
 
 const EventCard = ({ event }) => {
@@ -70,6 +71,7 @@ useEffect(() => {
         <h2 className="text-sm font-bold mb-2 flex items-center">
           <span className="text-gray-600">5 km away</span>
           <div className="relative ml-2">
+            <GoCopy />
             <FiInfo
               className="text-gray-500 cursor-pointer"
               onMouseEnter={() => setShowInfo(true)}
