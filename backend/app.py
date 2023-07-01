@@ -8,6 +8,9 @@ from bson.json_util import dumps, loads
 import os
 import datetime
 from flask_mail import Message, Mail
+from geopy.distance import geodesic
+from math import radians, sin, cos, sqrt, atan2
+
 
 load_dotenv()
 
@@ -315,9 +318,42 @@ def network():
     return parse_json(networks), 200
 
 
+def calculate_distances(coordinates, locations):
+    distances = []
+    print(coordinates, locations)
+    for location in locations:
+        lat = location["latitude"]
+        lon = location["longitude"]
+        location_coords = (lat, lon)
+
+        distance = 0.0
+        for coord_key, coord_val in coordinates.items():
+            if coord_key == "latitude" or coord_key == "longitude":
+                continue
+            coord_lat = coord_val["latitude"]
+            coord_lon = coord_val["longitude"]
+            coord = (coord_lat, coord_lon)
+            distance += geodesic(coord, location_coords).kilometers
+
+        distances.append(distance)
+
+    return distances
+
+
 @app.route("/api/recommended")
 def recommended():
     recommended_events = list(events_col.find())
+    # print(session.get("user"))
+    if not session.get("user"):
+        return parse_json(recommended_events), 200
+    user_coords = session.get("user").get("coordinates")
+    events_coords = []
+    for event in recommended_events:
+        events_coords.append(event["coordinates"])
+
+    print(user_coords, events_coords)
+    distances = calculate_distances(user_coords, events_coords)
+    print(distances)
     return parse_json(recommended_events), 200
 
 
@@ -455,10 +491,12 @@ def my_events():
     )  # Find events with matching IDs
     return parse_json(list(attended_events)), 200
 
+
 @app.route("/api/events/<eid>", methods=["GET"])
 def get_event(eid):
     event = events_col.find_one({"_id": ObjectId(eid)})
     return parse_json(event), 200
+
 
 # Check if user's session exists
 @app.route("/api/check-user")
@@ -485,6 +523,31 @@ def delete_attendee():
     print(data)
     print(attendees_col.find_one({"_id": ObjectId(data["_id"])}))
     attendees_col.delete_one({"_id": ObjectId(data["_id"])})
+    return jsonify(message="Deleted Successfully"), 200
+
+
+# @app.route("/api/delete-attendee", methods=["DELETE"])
+# def delete_attendee():
+#     if not session.get("user"):
+#         return jsonify({"error": "Not logged in"}), 403
+
+#     data = request.args.to_dict()
+#     print(data)
+#     print(attendees_col.find_one({"_id": ObjectId(data["_id"])}))
+#     attendees_col.delete_one({"_id": ObjectId(data["_id"])})
+#     return jsonify(message="Deleted Successfully"), 200
+
+
+@app.route("/api/delete-event", methods=["DELETE"])
+def delete_event():
+    if not session.get("user"):
+        return jsonify({"error": "Not logged in"}), 403
+
+    data = request.args.to_dict()
+    print(data)
+    print(events_col.find_one({"_id": ObjectId(data["_id"])}))
+    events_col.delete_one({"_id": ObjectId(data["_id"])})
+    attendees_col.delete_many({"eid": data["_id"]})
     return jsonify(message="Deleted Successfully"), 200
 
 

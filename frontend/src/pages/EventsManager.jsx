@@ -24,7 +24,7 @@ function EventsManager() {
     {!isLoading && data.length>0 ? <div className="container mx-auto p-4">
       <h1 className="text-3xl text-center font-bold mt-8 mb-12">Events Manager</h1>
       <div className="grid gap-9 md:grid-cols-2 lg:grid-cols-3 items-start">
-        {data?.map((event, index) => (
+        {data?.length && data.map((event, index) => (
           <EventManagerCard key={index} event={event} />
         ))}
       </div>

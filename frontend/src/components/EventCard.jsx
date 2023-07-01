@@ -14,6 +14,7 @@ const EventCard = ({ event }) => {
   const { name, startDate, endDate, language, email, phone, topics, venue, location, fields, description, minAge, maxAge, industry, status, genders } = event;
   const [registered, setRegistered] = useState("Loading...")
   const [showInfo, setShowInfo] = useState(false);
+  // const [copied, setCopied]= useState(false)
   const { register, error, isLoading, isSucc }=useRegisterEvent()
 
 
