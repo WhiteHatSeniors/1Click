@@ -27,7 +27,7 @@ function MyEvents() {
     {!isLoading && data.length>0 ? <div className="container mx-auto p-4 pb-20">
       <h1 className="text-3xl text-center font-bold mt-8 mb-12">My Events</h1>
       <div className="grid gap-9 md:grid-cols-2 lg:grid-cols-3 items-start">
-        {data?.map((event, index) => (
+        {data && data.map((event, index) => (
           <EventCard key={index} event={event} />
         ))}
       </div>
