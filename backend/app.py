@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session, make_response
+from flask import Flask, request, jsonify, session, send_from_directory
 import json, re, csv
 from flask_bcrypt import Bcrypt
 from pymongo import MongoClient
@@ -273,6 +273,35 @@ def create_event():
 
     return jsonify(message="Event created")
 
+# @app.route("/api/update", methods=["PATCH"])
+# def update_event():
+#     data = request.get_json()
+#     if not session.get("user"):
+#         return jsonify(error="Not logged in"), 403
+    
+#     # Validate the required fields
+#     # Validate the required fields
+#     required_fields = [
+#         "description",
+#         "name",
+#         "language",
+#         "topics",
+#         "fields",
+#         "email",
+#         "phone",
+#         "status",
+#         "industry",
+#         "minAge",
+#         "maxAge",
+#         "startDate",
+#         "endDate",
+#         "coordinates",
+#         "venue",
+#         "location",
+#         "url",
+#         "genders",
+#     ]
+
 
 @app.route("/api/network")
 def network():
@@ -351,19 +380,8 @@ def get_attendees_csv(eid):
             for field in fields["fields"]:
                 to_write.append(attendee[field])
             wobj.writerow(to_write)
-    with open(f"./attendees-store/{filename}", "r") as file:
-        data = file.readlines()
-    # Create a CSV string from the data
-    csv_data = '\n'.join([','.join(row) for row in data])
 
-    # Create a response with the CSV data
-    response = make_response(csv_data)
-    
-    # Set the appropriate headers
-    response.headers['Content-Disposition'] = 'attachment; filename=data.csv'
-    response.headers['Content-type'] = 'text/csv'
-
-    return response
+    return send_from_directory(directory='./attendees-store', path=filename, as_attachment=True)
 
 # Users registering for the event
 @app.route("/api/register/<eid>", methods=["POST"])
