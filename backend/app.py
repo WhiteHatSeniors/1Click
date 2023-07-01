@@ -320,7 +320,6 @@ def network():
 
 def calculate_distances(coordinates, locations):
     distances = []
-    print(coordinates, locations)
     for location in locations:
         lat = location["latitude"]
         lon = location["longitude"]
@@ -351,9 +350,7 @@ def recommended():
     for event in recommended_events:
         events_coords.append(event["coordinates"])
 
-    print(user_coords, events_coords)
     distances = calculate_distances(user_coords, events_coords)
-    print(distances)
     return parse_json(recommended_events), 200
 
 
