@@ -374,6 +374,7 @@ def check_register(eid):
             return jsonify({"registered": False}), 200
         else:
             return jsonify({"registered": True}), 200
+    return jsonify({"registered": False}), 200
 
 
 # Implement this Afnan
