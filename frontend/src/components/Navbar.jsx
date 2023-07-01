@@ -46,7 +46,7 @@ const Navbar = () => {
           </div>
           <div className="hidden md:block">
             <div className="ml-4 flex items-center space-x-4">
-            <NavLink to="/recommended" label="Events For you" />
+            <NavLink to="/recommended" label={state?.user ? "Events For you" : "Events"}/>
               <NavLink to="/search" label="Find An Event" />
               {state.user && <NavLink to="/create" label="List your Event" />}
               {state.user && <NavLink to="/my-events" label="My Events" />}
@@ -54,7 +54,7 @@ const Navbar = () => {
               {state.user && <NavLink to="/network" label="Your Network" />}
               {/* {state.user && <NavLink to="/blogs" label="Blogs" />} */}
               {/* {state.user && <NavLink to="/edit-profile" label="Edit Profile" />} */}
-              {!(state.user) && <NavLink to="/" label="Home"/>}
+              {/* {!(state.user) && <NavLink to="/" label="Home"/>} */}
               {!(state.user) ? <NavLink to="/login" label="Login" /> : 
               <button
               onClick={handleLogout}
@@ -94,12 +94,12 @@ const Navbar = () => {
           <NavLink to="/recommended" label="Events For you" />
               <NavLink to="/search" label="Find An Event" />
               {state.user && <NavLink to="/create" label="List your Event" />}
-              {state.user && <NavLink to="/create" label="My Events" />}
+              {state.user && <NavLink to="/my-events" label="My Events" />}
               {state.user && <NavLink to="/list" label="Event Manager" /> }
               {state.user && <NavLink to="/network" label="Your Network" />}
               {/* {state.user && <NavLink to="/blogs" label="Blogs" />} */}
               {/* {state.user && <NavLink to="/edit-profile" label="Edit Profile" />} */}
-              {!(state.user) && <NavLink to="/" label="Home"/>}
+              {/* {!(state.user) && <NavLink to="/" label="Home"/>} */}
               {!(state.user) ? <NavLink to="/login" label="Login" /> : 
               <button
               onClick={handleLogout}
