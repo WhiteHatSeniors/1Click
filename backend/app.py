@@ -369,9 +369,10 @@ def check_register(eid):
         check = attendees_col.find_one(
             {"eid": eid, "uid": session.get("user").get("_id")}
         )
-        return jsonify({"registered": True}), 200
-    if check is None:
-        return jsonify({"registered": False}), 200
+        if check is None:
+            return jsonify({"registered": False}), 200
+
+    return jsonify({"registered": True}), 200
 
 
 # Implement this Afnan
