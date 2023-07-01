@@ -383,11 +383,12 @@ def my_events():
     if not session.get("user"):
         return jsonify({"error": "Not logged in"}), 403
     
-    event_ids = attendees_col.find({"uid": session.get("user").get("_id")})
-    # print(type(event_ids))
-    events = events_col.find({"_id": {"$in": event_ids}})
-    # print(list(events))
-    return parse_json(list(events)), 200
+    attending_events = attendees_col.find({"uid": session.get("user").get("_id")})
+    event_ids = [record['eid'] for record in attending_events]  # Extract event IDs from attending records
+
+    attended_events = events_col.find({'_id': {'$in': event_ids}})  # Find events with matching IDs
+    return parse_json(list(attended_events)), 200
+
 
 
 # Check if user's session exists
