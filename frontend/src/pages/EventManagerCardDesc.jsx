@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import DataTable from '../components/DataTable';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '../context/AuthContext';
+import DownloadButton from '../components/DownloadButton';
 
 const EventManagerCardDesc = () => {
 
@@ -16,8 +17,8 @@ const EventManagerCardDesc = () => {
   const loc = useLocation()
   // console.log(loc.state.fields)
 
-  const dataLink = useRef();
-  const [csv, setCsv] = useState('');
+  // const dataLink = useRef();
+  // const [csv, setCsv] = useState('');
 
 
   const {state}= useAuthContext()
@@ -35,17 +36,17 @@ const EventManagerCardDesc = () => {
     // // enabled: false
   })
 
-  useEffect(() => {
-    if (csv) {
-      dataLink.current.click();
-    }
-  }, [csv]);
+  // useEffect(() => {
+  //   if (csv) {
+  //     dataLink.current.click();
+  //   }
+  // }, [csv]);
   
 
   const downloadCSV = async (e)=>{
         const res = await AxFetch.get(`/api/get-attendees-csv/${loc.state.event._id}`)
         console.log(res)
-        setCsv(res.data)
+        // setCsv(res.data)
         // toast.success("Attendee deleted successfully")
         
     // else toast.error("Attendee not deleted!")
@@ -77,9 +78,9 @@ const EventManagerCardDesc = () => {
       {data?.length!=0 && <DataTable data={data} deleteEntry={deleteEntry} col={loc.state.fields} />}
       {!(data) && "Loading..."}
       {data?.length==0 && <div className='text-center'>No attendees for now!</div>}
-      {data?.length!=0 && <button className={`text-white bg-blue-700 px-3 text-center py-2 mx-0 font-sm focus:outline-none hover:bg-blue-800`} onClick={downloadCSV}>
+      {data?.length!=0 && /*<button className={`text-white bg-blue-700 px-3 text-center py-2 mx-0 font-sm focus:outline-none hover:bg-blue-800`} onClick={downloadCSV}>
            <a className="hidden-element" download href={data} ref={dataLink}>Download CSV</a>
-        </button> }
+        </button>*/ <DownloadButton id={loc.state.event._id} /> }
     </div>
   );
 };
