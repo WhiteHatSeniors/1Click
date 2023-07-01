@@ -327,9 +327,10 @@ def calculate_distances(coordinates, locations):
         location_coords = (lat, lon)
 
         distance = 0.0
+        print(coordinates.items())
         for coord_key, coord_val in coordinates.items():
-            if coord_key == "latitude" or coord_key == "longitude":
-                continue
+            # if coord_key == "latitude" or coord_key == "longitude":
+            #     continue
             coord_lat = coord_val["latitude"]
             coord_lon = coord_val["longitude"]
             coord = (coord_lat, coord_lon)
@@ -351,9 +352,9 @@ def recommended():
     for event in recommended_events:
         events_coords.append(event["coordinates"])
 
-    print(user_coords, events_coords)
-    distances = calculate_distances(user_coords, events_coords)
-    print(distances)
+    # print(user_coords, events_coords)
+    # distances = calculate_distances(user_coords, events_coords)
+    # print(distances)
     return parse_json(recommended_events), 200
 
 
