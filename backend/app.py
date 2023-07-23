@@ -11,12 +11,14 @@ from flask_mail import Message, Mail
 from geopy.distance import geodesic
 from math import radians, sin, cos, sqrt, atan2
 
+from ML import recommend
+
 
 load_dotenv()
 
 app = Flask(__name__)
 bcrypt = Bcrypt()
-app.secret_key = os.environ.get("SECRET_KEY")
+app.secret_key = "asmnufdhgsbdfhnszdfuhgabsha"
 
 # MongoDB configuration
 MONGO_URI = os.environ.get("MONGO_URI")
@@ -342,18 +344,8 @@ def calculate_distances(coordinates, locations):
 
 @app.route("/api/recommended")
 def recommended():
-    recommended_events = list(events_col.find())
-    # print(session.get("user"))
-    if not session.get("user"):
-        return parse_json(recommended_events), 200
-    user_coords = session.get("user").get("coordinates")
-    events_coords = []
-    for event in recommended_events:
-        events_coords.append(event["coordinates"])
-
-    # print(user_coords, events_coords)
-    # distances = calculate_distances(user_coords, events_coords)
-    # print(distances)
+    recommended_events = list(recommend((session.get("user"))["_id"], users_col))
+    recommended_events = list(events_col.find({"_id": {"$in": recommended_events}}))
     return parse_json(recommended_events), 200
 
 
