@@ -6,14 +6,6 @@ from nltk.stem.porter import PorterStemmer
 from sklearn.metrics.pairwise import cosine_similarity
 from bson.objectid import ObjectId
 
-# myclient = pymongo.MongoClient(
-#     "mongodb+srv://millijack34:aptrm5%40123@eventscluster.cstc6fy.mongodb.net/"
-# )
-
-# mydb = myclient["EventsDB"]
-
-# user_coll = mydb["users"]
-
 
 def stem(text):
     ps = PorterStemmer()

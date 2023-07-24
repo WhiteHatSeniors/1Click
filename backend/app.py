@@ -18,7 +18,7 @@ load_dotenv()
 
 app = Flask(__name__)
 bcrypt = Bcrypt()
-app.secret_key = "asmnufdhgsbdfhnszdfuhgabsha"
+app.secret_key = os.environ.get("SECRET_KEY")
 
 # MongoDB configuration
 MONGO_URI = os.environ.get("MONGO_URI")
