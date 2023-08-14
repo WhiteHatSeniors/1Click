@@ -40,7 +40,7 @@
 ## How to run?
 
 1. Clone the repository.
-2. >git clone https://github.com/sikehish/1Click.git
+>git clone https://github.com/sikehish/1Click.git
 
 3. In the frontend directory, Install the dependencies using `npm install`.
 
