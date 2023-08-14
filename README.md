@@ -40,16 +40,17 @@
 ## How to run?
 
 1. Clone the repository.
+2. >git clone https://github.com/sikehish/1Click.git
 
-2. In the frontend directory, Install the dependencies using `npm install`.
+3. In the frontend directory, Install the dependencies using `npm install`.
 
-3. In the backend directory, Create a virtual environment if necessary using `python -m venv venv` (Optional) and install the dependencies using `pip install -r requirements.txt`.
+4. In the backend directory, Create a virtual environment if necessary using `python -m venv venv` (Optional) and install the dependencies using `pip install -r requirements.txt`.
 
-4. In the backend directory, run the backend server using `python app.py`.
+5. In the backend directory, run the backend server using `python app.py`.
 
-5. In the frontend directory, run the frontend server using `npm run dev`.
+6. In the frontend directory, run the frontend server using `npm run dev`.
 
-6. Open `localhost:3000` in your browser.
+7. Open `localhost:3000` in your browser.
 
 ## Contributors
 
