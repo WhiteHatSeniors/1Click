@@ -11,7 +11,7 @@ from flask_mail import Message, Mail
 from geopy.distance import geodesic
 from math import radians, sin, cos, sqrt, atan2
 
-from ML import recommend
+from ML import recommend, add_event
 
 
 load_dotenv()
@@ -274,9 +274,12 @@ def create_event():
     }
 
     # Insert the event document into the events collection
-    events_col.insert_one(event)
-
+    inserted_event = events_col.insert_one(event)
+    id = inserted_event.inserted_id
+    inserted_event = events_col.find_one({"_id": ObjectId(id)})
+    add_event(inserted_event)
     return jsonify(message="Event created")
+
 
 
 # @app.route("/api/update", methods=["PATCH"])
