@@ -320,33 +320,29 @@ def network():
     return parse_json(networks), 200
 
 
-def calculate_distances(coordinates, locations):
-    distances = []
-    for location in locations:
-        lat = location["latitude"]
-        lon = location["longitude"]
-        location_coords = (lat, lon)
+@app.route("/api/distance", methods=["POST"])
+def calculate_distances():
+    data = request.get_json()
+    evnt_location_dict = data["location"]
+    user_coord_dict = (session.get("user"))["coordinates"]
+    user_coord = (user_coord_dict["latitude"], user_coord_dict["longitude"])
+    evnt_location = (evnt_location_dict["latitudes"], evnt_location_dict["longitudes"])
+    distance = geodesic(user_coord, evnt_location).kilometers
 
-        distance = 0.0
-        print(coordinates.items())
-        for coord_key, coord_val in coordinates.items():
-            # if coord_key == "latitude" or coord_key == "longitude":
-            #     continue
-            coord_lat = coord_val["latitude"]
-            coord_lon = coord_val["longitude"]
-            coord = (coord_lat, coord_lon)
-            distance += geodesic(coord, location_coords).kilometers
-
-        distances.append(distance)
-
-    return distances
+    return jsonify(distance=int(distance))
 
 
 @app.route("/api/recommended")
 def recommended():
     recommended_events = list(recommend((session.get("user"))["_id"], users_col))
-    recommended_events = list(events_col.find({"_id": {"$in": recommended_events}}))
-    return parse_json(recommended_events), 200
+    m = {"$match": {"_id": {"$in": recommended_events}}}
+    a = {"$addFields": {"__order": {"$indexOfArray": [recommended_events, "$_id"]}}}
+    s = {"$sort": {"__order": 1}}
+    recommended_events = events_col.aggregate([m, a, s])
+    final = []
+    for event in recommended_events:
+        final.append(event)
+    return parse_json(final), 200
 
 
 @app.route("/api/search", methods=["GET"])
