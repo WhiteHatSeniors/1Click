@@ -281,7 +281,6 @@ def create_event():
     return jsonify(message="Event created")
 
 
-
 # @app.route("/api/update", methods=["PATCH"])
 # def update_event():
 #     data = request.get_json()
@@ -328,8 +327,12 @@ def calculate_distances():
     data = request.get_json()
     evnt_location_dict = data["location"]
     user_coord_dict = (session.get("user"))["coordinates"]
-    user_coord = (user_coord_dict["latitude"], user_coord_dict["longitude"])
-    evnt_location = (evnt_location_dict["latitudes"], evnt_location_dict["longitudes"])
+    user_coord = (user_coord_dict.get("latitude"), user_coord_dict["longitude"])
+    lats = evnt_location_dict.get("latitudes")
+    lat = evnt_location_dict.get("latitude")
+    longs = evnt_location_dict.get("longitudes")
+    long = evnt_location_dict.get("longitude")
+    evnt_location = (lats if lats != None else lat, longs if longs != None else long)
     distance = geodesic(user_coord, evnt_location).kilometers
 
     return jsonify(distance=int(distance))
