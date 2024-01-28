@@ -9,7 +9,6 @@ const topicsArr = [
   'Casual',
   'Social Cause',
   'Education',
-  'Health',
   'Gaming',
   'Leisure',
   'Travel',
