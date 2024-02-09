@@ -16,7 +16,7 @@ def stem(text):
 
 
 def add_event(event):
-    all_events = pickle.load(open("all_events.pkl", "rb"))
+    all_events = pickle.load(open("../all_events.pkl", "rb"))
     print(all_events.columns)
     index = len(all_events)
     topics = " ".join(event["topics"])
@@ -34,7 +34,7 @@ def add_event(event):
         "tags": language + " " + topics,
     }
 
-    pickle.dump(all_events, open("all_events.pkl", "wb"))
+    pickle.dump(all_events, open("../all_events.pkl", "wb"))
 
 
 def recommend(id, user_coll):
@@ -42,7 +42,7 @@ def recommend(id, user_coll):
 
     id = ObjectId(id)
 
-    all_events = pickle.load(open("all_events.pkl", "rb"))
+    all_events = pickle.load(open("../all_events.pkl", "rb"))
     user_data = {}
     for user in user_coll.find({"_id": id}):
         user_data = user
