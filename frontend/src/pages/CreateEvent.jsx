@@ -180,7 +180,7 @@ const fieldsDefault = selectedFields.map((el) => {
         <div className="p-4 mb-7 w-full text-center text-sm text-green-800 rounded-lg bg-green-200  dark:text-green-700 " role="alert"> Succesfully signed in!</div>
       )}
       <form onSubmit={handleSubmit}>
-        <h1 className="text-3xl font-bold mb-10 text-center">Event Registration</h1>
+        <h1 className="text-3xl font-bold mb-10 text-center">Create Your Event</h1>
         <div className="mb-8">
           <div className="h-2 bg-gray-200 rounded-full">
             <div className="h-full bg-green-500 rounded-full" style={{ width: `${progressPercentage}%` }}></div>
