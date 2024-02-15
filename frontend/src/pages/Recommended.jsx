@@ -11,11 +11,19 @@ function Recommended() {
 
 
   const { state } = useAuthContext()
-  const getRecommended = async (page) => {
+
+  const getRecommended = async () => {
+    console.log("Requested for page", page)
     const res = await AxFetch.get(`/api/recommended/${page}`, { validateStatus: false })
     console.log(res.data)
     return res.data;
   }
+
+  // useEffect(()=> {
+  //   getRecommended(page).then((data) => {
+  //     setEvents(data)
+  //   })
+  // },[])
 
   useEffect(() => {
     // const { data, 
@@ -29,10 +37,11 @@ function Recommended() {
     //   retry: false,
     //   // enabled: false
     // })
-    getRecommended(page).then((data) => {
+    getRecommended().then((data) => {
       // setIsLoadingEvents(false)
       // if (status === "success") {
         setEvents(prevEvents => [...prevEvents, ...data])
+        console.log("Added events")
       // }
     })
   }, [page])
@@ -46,7 +55,8 @@ function Recommended() {
   const handleScroll = (event) => {
     const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
     console.log(scrollTop, clientHeight, scrollHeight)
-    if (scrollHeight - scrollTop === clientHeight) {
+    const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
+    if (scrollPercentage > 0.6) { 
       console.log("Reached bottom")
       setPage(prevPage => prevPage + 1);
     }
@@ -54,10 +64,10 @@ function Recommended() {
 
   return (
     <>
-      {!isLoadingEvents && events.length > 0 ? <div className="container mx-auto p-4 pb-20">
+      {!isLoadingEvents && events.length > 0 ? <div className="container mx-auto p-4">
         <h1 className="text-3xl text-center font-bold mt-8 mb-12">{state?.user ? "Recommended Events For You" : "Events"}</h1>
-        <div onScroll={handleScroll} className="grid gap-9 md:grid-cols-2 lg:grid-cols-3 items-start">
-          { console.log(events.length) }
+        <div onScroll={handleScroll} style={{height:'65vh'}} className="grid gap-9 md:grid-cols-2 lg:grid-cols-3 items-start overflow-auto">
+          { console.log("Total events displayed now:",events.length) }
           {events?.map((event, index) => (
             <EventCard key={index} event={event} />
           ))}
