@@ -54,9 +54,9 @@ function Recommended() {
 
   const handleScroll = (event) => {
     const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
-    console.log(scrollTop, clientHeight, scrollHeight)
+    // console.log(scrollTop, clientHeight, scrollHeight)
     const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
-    if (scrollPercentage > 0.6) { 
+    if (scrollPercentage > 0.9) { 
       console.log("Reached bottom")
       setPage(prevPage => prevPage + 1);
     }
@@ -66,7 +66,7 @@ function Recommended() {
     <>
       {!isLoadingEvents && events.length > 0 ? <div className="container mx-auto p-4">
         <h1 className="text-3xl text-center font-bold mt-8 mb-12">{state?.user ? "Recommended Events For You" : "Events"}</h1>
-        <div onScroll={handleScroll} style={{height:'65vh'}} className="grid gap-9 md:grid-cols-2 lg:grid-cols-3 items-start overflow-auto">
+        <div onScroll={handleScroll} style={{height:'70vh'}} className="grid gap-9 md:grid-cols-2 lg:grid-cols-3 items-start overflow-auto">
           { console.log("Total events displayed now:",events.length) }
           {events?.map((event, index) => (
             <EventCard key={index} event={event} />
