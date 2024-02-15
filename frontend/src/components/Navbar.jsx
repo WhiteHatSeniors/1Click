@@ -33,7 +33,7 @@ const Navbar = () => {
     setIsOpen(!isOpen);
   };
 
-    console.log(state.user)
+    // console.log(state.user)
 
   return (
     <nav className="bg-gray-800">

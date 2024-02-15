@@ -75,7 +75,7 @@ const EventCard = ({ event }) => {
       })
       const data = await res.json()
       setDist(data['distance'])
-      console.log('HHHHHEEEEELLLLLOOO')
+      // console.log('HHHHHEEEEELLLLLOOO')
     };
 
     func()
