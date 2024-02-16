@@ -13,6 +13,9 @@ from math import radians, sin, cos, sqrt, atan2
 
 from ML import recommend, add_event
 
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 load_dotenv()
 
@@ -350,7 +353,6 @@ def recommended(page):
     final = []
     for event in recommended_events:
         final.append(event)
-    print(len(final))
     return parse_json(final), 200
 
 
