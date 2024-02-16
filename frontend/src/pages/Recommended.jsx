@@ -2,12 +2,14 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react'
 import AxFetch from '../utils/axios';
 import EventCard from '../components/EventCard';
+import DummyEventCard from '../components/DummyEventCard';
 import { useAuthContext } from '../context/AuthContext';
 
 function Recommended() {
   const [ page, setPage ] = useState(1)
   const [events, setEvents] = useState([])
   const [isLoadingEvents, setIsLoadingEvents] = useState(false)
+  const [continuousLoad, setContinuousLoad] = useState(false)
 
 
   const { state } = useAuthContext()
@@ -23,6 +25,7 @@ function Recommended() {
     getRecommended(page).then((data) => {
         setEvents(prevEvents => [...prevEvents, ...data])
         console.log(Date.now(),"Added events")
+        setContinuousLoad(false)
     })
   }, [page])
 
@@ -31,8 +34,9 @@ function Recommended() {
     const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
     const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
     console.log("HANDLE SCROLL HAS BEEN ACTIVATED!!")
-    if (scrollPercentage > 0.60) { 
+    if (scrollPercentage > 0.90) { 
       console.log("Reached bottom")
+      setContinuousLoad(true)
       setPage(prevPage => prevPage + 1);
     }
   };
@@ -46,6 +50,7 @@ function Recommended() {
           {events?.map((event, index) => (
             <EventCard key={index} event={event} />
           ))}
+          {continuousLoad && <><DummyEventCard /><DummyEventCard /><DummyEventCard /><DummyEventCard /><DummyEventCard /><DummyEventCard /><DummyEventCard /><DummyEventCard /><DummyEventCard /><DummyEventCard /><DummyEventCard /><DummyEventCard /><DummyEventCard /><DummyEventCard /></>}
         </div>
       </div> : <h1 className='text-3xl text-center font-bold mt-8 mb-12'>No Recommended Events for now</h1>}
       {isLoadingEvents && <div className="text-xl text-center font-bold mt-8 mb-12">Loading</div>}
