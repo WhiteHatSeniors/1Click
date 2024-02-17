@@ -13,6 +13,9 @@ from math import radians, sin, cos, sqrt, atan2
 
 from ML import recommend, add_event
 
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 load_dotenv()
 
@@ -338,13 +341,15 @@ def calculate_distances():
     return jsonify(distance=int(distance))
 
 
-@app.route("/api/recommended")
-def recommended():
+@app.route("/api/recommended/<int:page>")
+def recommended(page):
     recommended_events = list(recommend((session.get("user"))["_id"], users_col))
     m = {"$match": {"_id": {"$in": recommended_events}}}
     a = {"$addFields": {"__order": {"$indexOfArray": [recommended_events, "$_id"]}}}
     s = {"$sort": {"__order": 1}}
-    recommended_events = events_col.aggregate([m, a, s])
+    l = {"$limit": 25}
+    p = {"$skip": page * 25}
+    recommended_events = events_col.aggregate([m, a, s, p, l])
     final = []
     for event in recommended_events:
         final.append(event)

@@ -38,9 +38,9 @@ useEffect(() => {
       credentials: "same-origin"
     })
     const data = await res.json()
-    console.log("DAATTAAAAAAAAA ", data)
+    // console.log("DAATTAAAAAAAAA ", data)
     if(data?.exists) dispatch({type:'LOGIN', payload: data.user})
-    console.log(state, data.user)
+    // console.log(state, data.user)
   }
 
   getData()
