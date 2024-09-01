@@ -10,6 +10,9 @@
 
 - Create and manage events with ease.
 
+![Landing Page - 1Click](showcase/1click.jpeg)
+![One click to register!](showcase/1click.gif)
+
 ## Features
 
 1. Register to 1Click with your details, these are stored securely and used to provide organisers with your data when you register to their events.
