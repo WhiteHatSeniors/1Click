@@ -38,7 +38,7 @@
 
 ## How was it built?
 
-- 1Click was built during Infothon'23 at VVCE, Mysuru. The frontend was built using ReactJS, the backend was built using Flask, and the database used was MongoDB's Atlas - A cloud database.
+- 1Click was built during Infothon'23 at VVCE, Mysuru. The frontend was built using ReactJS, the backend was built using Flask, and the database used was MongoDB's Atlas - A cloud database. You can read mpore about the project here: https://safnank.netlify.app/projects/1click/1click
 
 ## How to run?
 
